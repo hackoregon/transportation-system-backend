@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image: znmeb/postgis
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+  api:
+    environment:
+    - DEBUG=${DEBUG}
+    - PROJECT_NAME=${PROJECT_NAME}
+    build:
+      context: .
+      dockerfile: DOCKERFILE
+    image: "${API_DOCKER_IMAGE}"
+    command: ./bin/local-docker-entrypoint.sh
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
