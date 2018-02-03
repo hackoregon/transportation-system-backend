@@ -20,10 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '2-$tscn971yzhr+%#0s@730u8pz=_tw!jau9mvseu(b))fq=i*'
+SECRET_KEY =  os.environ.get('DJANGO_SECRET_KEY'),
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -76,10 +76,10 @@ WSGI_APPLICATION = 'crash_data_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('POSTGRES_NAME'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
         'USER': os.environ.get('POSTGRES_USER'),
-        'HOST': os.environ.get('POSTGRES_HOST'),
-        'PORT': '',
+        'HOST': os.environ.get('db'),
+        'PORT': os.environ.get('POSTGRES_PORT')
     }
 }
 
