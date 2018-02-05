@@ -3,7 +3,7 @@ services:
   db:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DOCKERFILE.db
     image: docker.io/znmeb/odot_crash_data
     environment:
       - POSTGRES_PASSWORD
@@ -16,7 +16,7 @@ services:
     - PROJECT_NAME=${PROJECT_NAME}
     build:
       context: .
-      dockerfile: DOCKERFILE
+      dockerfile: DOCKERFILE.api
     image: "${API_DOCKER_IMAGE}"
     command: ./bin/local-docker-entrypoint.sh
     volumes:
