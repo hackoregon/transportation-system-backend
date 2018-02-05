@@ -17,7 +17,7 @@ services:
     build:
       context: .
       dockerfile: DOCKERFILE.api
-    image: "${API_DOCKER_IMAGE}"
+    image: bhgrant/hackoregon_geodjango
     command: ./bin/local-docker-entrypoint.sh
     volumes:
       - .:/code

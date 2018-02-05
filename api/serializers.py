@@ -6,4 +6,16 @@ class CrashSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Crash
-        fields = ('crash_id', 'crash_dt', 'cnty_id', 'crash_cause_1_short_desc')
+        fields = '__all__'
+
+class ParticSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Partic
+        fields = '__all__'
+
+class VhclSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Vhcl
+        fields = '__all__'
