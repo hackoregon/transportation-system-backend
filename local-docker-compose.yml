@@ -2,8 +2,6 @@ version: '3'
 services:
   db:
     image: znmeb/postgis
-    ports:
-      - "5439:5432"
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
