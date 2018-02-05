@@ -35,6 +35,9 @@ wheels/
 pip-log.txt
 pip-delete-this-directory.txt
 
+#Data
+*.sql
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -102,3 +105,5 @@ ENV/
 
 # for environment variables
 **/env.sh
+
+**/.DS_Store
