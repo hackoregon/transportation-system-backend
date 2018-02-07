@@ -11,9 +11,6 @@ services:
       - 5439:5432
     env_file: ./bin/.env
   api:
-    environment:
-    - DEBUG=${DEBUG}
-    - PROJECT_NAME=${PROJECT_NAME}
     build:
       context: .
       dockerfile: DOCKERFILE.api
