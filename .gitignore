@@ -107,3 +107,6 @@ ENV/
 **/env.sh
 
 **/.DS_Store
+
+.vscode/
+rest_framework_swagger/
