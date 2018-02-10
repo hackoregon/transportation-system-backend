@@ -35,6 +35,9 @@ wheels/
 pip-log.txt
 pip-delete-this-directory.txt
 
+#Data
+*.sql
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
@@ -104,3 +107,6 @@ ENV/
 **/env.sh
 
 **/.DS_Store
+
+.vscode/
+rest_framework_swagger/
