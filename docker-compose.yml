@@ -7,7 +7,7 @@ services:
     image: docker.io/znmeb/odot_crash_data
     environment:
       - POSTGRES_PASSWORD
-    ports: 
+    ports:
       - 5439:5432
     env_file: ./bin/.env
   api:
