@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.postgis
-    image: $POSTGRES_DOCKER_IMAGE
+    image: db
     ports:
       - 5439:5432
     environment:
@@ -24,7 +24,7 @@ services:
     build:
       context: .
       dockerfile: DOCKERFILE.api
-    image: $API_DOCKER_IMAGE
+    image: api
     command: ./bin/local-docker-entrypoint.sh
     volumes:
       - .:/code
