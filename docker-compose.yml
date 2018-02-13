@@ -3,13 +3,23 @@ services:
   db:
     build:
       context: .
-      dockerfile: DOCKERFILE.db
-    image: docker.io/znmeb/odot_crash_data
-    environment:
-      - POSTGRES_PASSWORD
+      dockerfile: Dockerfile.postgis
+    image: transport-database
     ports:
       - 5439:5432
+    environment:
+      - POSTGRES_PASSWORD
     env_file: ./bin/.env
+  #db:
+    #build:
+      #context: .
+      #dockerfile: DOCKERFILE.db
+    #image: docker.io/znmeb/odot_crash_data
+    #environment:
+      #- POSTGRES_PASSWORD
+    #ports:
+      #- 5439:5432
+    #env_file: ./bin/.env
   api:
     build:
       context: .
