@@ -88,23 +88,24 @@ So what is changed from the default Django setup for the staging environment. **
 * create the `gunicorn_config.py` file to hold gunicorn config, including using gevent worker_class
 * create a staging/production docker_compose file, to use the correct .env, entrypoint, and any other changes needed
 * Make changes to settings.py:
-Change DEBUG line:
 
 ```
+# Change DEBUG line:
+
 DEBUG = os.environ.get('DEBUG') == "True" - handles os variables being treated as strings
-```
-ADD to MIDDLEWARE right after SECURITY:
 
-```
+# ADD to MIDDLEWARE right after SECURITY:
+
+
 'whitenoise.middleware.WhiteNoiseMiddleware',
-```
-ADD these just before the STATIC_URL so staticfiles are handled correctly and are compressed:
 
-```
+# ADD these just before the STATIC_URL so staticfiles are handled correctly and are compressed:
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 ```
+
 * Add the following to the app wsgi file to monkey patch to gevent when running in gunicorn only:
 
 ```
