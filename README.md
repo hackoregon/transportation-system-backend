@@ -37,9 +37,9 @@ DJANGO_SECRET_KEY= <a secret key also should be long, unique random string>
 
 7. Confirm you have executable perms on all the scripts in the `./bin` folder: `$ chmod +x ./bin/*.sh` Feel free to read each one and assign perms individually, cause it is your computer :stuck_out_tongue_winking_eye: and security is a real thing.
 
-8. Run the `build.sh` script to build the project. Since you are going to be running it on the local machine you will want to run: `./bin/build.sh -l` - This command is doing a docker-compose build in the background. It is downloading the images needed for the project to your local machine.
+8. Run the `build.sh` script to build the project. Since you are going to be running it on the local machine you will want to run: `./bin/build.sh -l` - This command is doing a docker-compose build in the background. It is downloading the images needed for the project to your local machine and then building for a local development environment.
 
-9. Once this completes you will now want to start up the project. We will use the start.sh script for this, again using the `-l` flag to run locally:  `./bin/start.sh -l` The first time you run this you should see a bunch of sql commands running and will probably see the api container give an error about the database not being available on the port you set. Don't worry, just wait for the startup to finish. (Though this is not an ideal process it works for now).
+9. Once this completes you will now want to start up the project. We will use the start.sh script for this, again using the `-l` flag to run locally for development:  `./bin/start.sh -l` The first time you run this you should see a bunch of sql commands running and will probably see the api container give an error about the database not being available on the port you set. Don't worry, just wait for the startup to finish. (Though this is not an ideal process it works for now).
 
 10. Once the first startup completes kill the container using cmd c/ctrl c depending on your os.
 
@@ -49,6 +49,72 @@ DJANGO_SECRET_KEY= <a secret key also should be long, unique random string>
 
 13. To Run Tests: run the `./bin/build-test.sh -l` command.
 
+## Run in Staging Environment
+
+While developing the API, using the built in dev server is useful as it allows for live reloading, and debug messages. When running in a production environment, this is a security risk, and not efficient. As such a staging/production environment has been created using the following technologies:
+
+* Gunicorn - A "green" HTTP server
+* Gevent - Asynchronous workers
+* Pyscopgreen - A "green" version of the psycop database connector
+* WhiteNoise - allows for hosting of static files by gunicorn in a prod environment vs. integrating a webserver
+
+### Instructions:
+
+1. copy the `/bin/env.staging.sample` file to create a `.env.staging` file in same directory:
+```
+$ cp ./bin/env.staging.sample ./bin/.env.staging
+```
+
+2. open the `./bin/.env` in your text editor and complete the environmental variables.
+
+3. Download and save the sql file if you have not already.
+
+4. Run the `build.sh` script to build the project for the staging environment: `$ ./bin/build.sh -s`
+
+5. Start the project using the staging flag: `$ ./bin/start.sh -s`
+
+6.  Open your browser and you should be able to access the Django Restframework browserable front end at: http://localhost:8000/api and Swagger at http://localhost:8000/schema
+
+7. Try going to an nonexistent page and you should see a generic 404 Not found page instead of the Django debug screen.
+
+### What was configured:
+
+So what is changed from the default Django setup for the staging environment. **This already has been done, being included for informational purposes**
+
+* Add gunicorn, gevent, and whitenoise to `requirements.txt`
+* Set the debug variable to false in the `.env.staging`
+* make any other changes necessary to config vars, ie: database settings
+* create a staging entrypoint/prod entrypoint file that runs the gunicorn start command instead of the ./manage.py runserver
+* create the `gunicorn_config.py` file to hold gunicorn config, including using gevent worker_class
+* create a staging/production docker_compose file, to use the correct .env, entrypoint, and any other changes needed
+* Make changes to settings.py:
+Change DEBUG line:
+
+```
+DEBUG = os.environ.get('DEBUG') == "True" - handles os variables being treated as strings
+```
+ADD to MIDDLEWARE right after SECURITY:
+
+```
+'whitenoise.middleware.WhiteNoiseMiddleware',
+```
+ADD these just before the STATIC_URL so staticfiles are handled correctly and are compressed:
+
+```
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+```
+* Add the following to the app wsgi file to monkey patch to gevent when running in gunicorn only:
+
+```
+if os.environ.get('DEBUG') != "True":
+    from gevent import monkey
+    monkey.patch_all()
+
+    from psycogreen.gevent import patch_psycopg
+    patch_psycopg()
+```
 
 ## Contributing
 

@@ -84,6 +84,7 @@ celerybeat-schedule
 
 # dotenv
 .env
+.env.staging
 
 # virtualenv
 .venv
@@ -110,3 +111,4 @@ ENV/
 
 .vscode/
 rest_framework_swagger/
+staticfiles/
