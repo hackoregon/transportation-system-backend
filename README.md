@@ -106,16 +106,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 ```
 
-* Add the following to the app wsgi file to monkey patch to gevent when running in gunicorn only:
-
-```
-if os.environ.get('DEBUG') != "True":
-    from gevent import monkey
-    monkey.patch_all()
-
-    from psycogreen.gevent import patch_psycopg
-    patch_psycopg()
-```
 
 ## Contributing
 
