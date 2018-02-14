@@ -21,8 +21,6 @@ Annotated sample:
 ```
 PROJECT_NAME=<This will be our canonical project name once it is figured out>
 DEBUG=True - <Switch to go from dev server environment to prod>
-API_DOCKER_IMAGE= <what you want to name the local docker image for api>
-POSTGRES_DOCKER_IMAGE= <what you want to name the local docker image for POSTGRES>
 POSTGRES_USER= <User in postgres environment>
 POSTGRES_NAME=odot_crash_data <Database name in postgres environment set to odot_crash_data for current dataset>
 POSTGRES_HOST=db <connects to database container name in the docker compose file>
@@ -31,9 +29,9 @@ POSTGRES_PASSWORD= <password, make it strong and unique>
 DJANGO_SECRET_KEY= <a secret key also should be long, unique random string>
 ```
 
-5. Currently when working with the odot_crash_data, you will need to download the sql from the team drive and save into the bin folder: `./bin/odot_crash_data.sql`
+5. This release uses a new technique for building the `db` database image that allows automatic database restores. You can create database backups with `pgAdmin` or `pg_dump` and place them in `./Backups` *before doing the Docker build.* The build will copy them onto the image and the first "run" in a container will restore them. See [Automatic database restores](https://github.com/hackoregon/data-science-pet-containers/blob/master/README.md#automatic-database-restores)
 
-6. Both of the above files are already added to the `.gitignore` file. Provided you do not rename them or change locations they should not be committed to the repo and this project should build and run.
+6. The `./bin/.env` file and the backup files have been added to the `.gitignore` file. Provided you do not rename them or change locations they should not be committed to the repo and this project should build and run.
 
 7. Confirm you have executable perms on all the scripts in the `./bin` folder: `$ chmod +x ./bin/*.sh` Feel free to read each one and assign perms individually, cause it is your computer :stuck_out_tongue_winking_eye: and security is a real thing.
 
