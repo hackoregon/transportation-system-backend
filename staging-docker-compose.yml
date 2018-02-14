@@ -14,7 +14,7 @@ services:
     build:
       context: .
       dockerfile: DOCKERFILE.api
-    image: $API_DOCKER_IMAGE
+    image: transportation_systems_crash_api
     command: ./bin/travis-docker-entrypoint.sh
     volumes:
       - .:/code
