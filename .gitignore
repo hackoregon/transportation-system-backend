@@ -110,3 +110,6 @@ ENV/
 
 .vscode/
 rest_framework_swagger/
+
+bin/.env.staging
+staticfiles/
