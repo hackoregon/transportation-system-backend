@@ -21,3 +21,12 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    environment:
+      - PROJECT_NAME
+      - DEBUG
+      - POSTGRES_USER
+      - POSTGRES_NAME
+      - POSTGRES_HOST
+      - POSTGRES_PORT
+      - POSTGRES_PASSWORD
+      - DJANGO_SECRET_KEY
