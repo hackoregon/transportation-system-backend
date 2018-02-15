@@ -14,7 +14,7 @@ In order to run this you will want to:
 
 3. copy the `env.sample` file to `.env`:
 ```
-$ cp .env.sample .env
+$ cp env.sample .env
 ```
 
 4. open the `.env` in your text editor and complete the environmental variables. When working in your dev. environment, only the prefilled ones really matter. If you are working as part of the project team we will discuss any need for standardization or other environments in team setting.
