@@ -3,18 +3,17 @@ services:
   db:
     build:
       context: .
-      dockerfile: DOCKERFILE.db
-    image: docker.io/znmeb/odot_crash_data
-    environment:
-      - POSTGRES_PASSWORD
+      dockerfile: Dockerfile.postgis
+    image: db
     ports:
       - 5439:5432
-    env_file: ./bin/.env
+    environment:
+      - POSTGRES_PASSWORD
   api:
     build:
       context: .
       dockerfile: DOCKERFILE.api
-    image: transportation_systems_crash_api
+    image: api
     command: ./bin/local-docker-entrypoint.sh
     volumes:
       - .:/code
@@ -22,4 +21,12 @@ services:
       - "8000:8000"
     depends_on:
       - db
-    env_file: ./bin/.env
+    environment:
+      - PROJECT_NAME
+      - DEBUG
+      - POSTGRES_USER
+      - POSTGRES_NAME
+      - POSTGRES_HOST
+      - POSTGRES_PORT
+      - POSTGRES_PASSWORD
+      - DJANGO_SECRET_KEY
