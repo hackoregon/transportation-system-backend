@@ -177,8 +177,10 @@ proc_name = None
 #       A callable that takes a server instance as the sole argument.
 #
 
+# Enable greenlet support in psycopg
 def post_fork(server, worker):
-    server.log.info("Worker spawned (pid: %s)", worker.pid)
+    from psycogreen.gevent import patch_psycopg
+    patch_psycopg()
 
 def pre_fork(server, worker):
     pass
