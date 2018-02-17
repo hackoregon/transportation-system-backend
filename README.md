@@ -25,7 +25,7 @@ ERROR: for db  Cannot start service db: driver failed programming external conne
 Encountered errors while bringing up the project.
 ```
 
-If this happens, you will need to restart Docker. Open the `Settings` dialog and go to `Reset`. Select the `Restart` option (the top one). Wait till the green `Docker is running` light shows up and then go back to your terminal. Everything should work. If not, it's a Docker bug, not something you did wrong.
+If this happens, you will need to restart Docker. Open the `Settings` dialog and go to `Reset`. Select the `Restart` option (the top one). Wait till the green `Docker is running` light shows up and then go back to your terminal. Everything should then work. ***This is a known Docker for Windows bug, not something you did wrong.***
 
 ## Getting Started
 
