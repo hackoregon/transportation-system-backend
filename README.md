@@ -15,6 +15,18 @@ So far, I've found that Bash and `sh` scripts will crash if they have Windows li
 
 One final note: `vim` has a command `:setfileformat`. Either `:setfileformat unix` if you want the Unix / Linux convention or `:setfileformat dos` if you want the DOS / Windows convention. Then save the file and edit your `.gitattributes` file to declare that the file must have that convention on checkout.
 
+## Restarting Docker for Windows sometimes necessary
+Sometimes, Docker for Windows loses contact with some critical resource and throws ugly messages like this:
+
+```
+ERROR: for transportationsystembackend_db_1  Cannot start service db: driver failed programming external connectivity on endpoint transportationsystembackend_db_1 (f944aeb0244747359af77373b4949561c6e6e1d8ee48fb0bfc8aba98aa32877e): Error starting userland proxy: mkdir /port/tcp:0.0.0.0:5439:tcp:172.18.0.2:5432: input/output error
+
+ERROR: for db  Cannot start service db: driver failed programming external connectivity on endpoint transportationsystembackend_db_1 (f944aeb0244747359af77373b4949561c6e6e1d8ee48fb0bfc8aba98aa32877e): Error starting userland proxy: mkdir /port/tcp:0.0.0.0:5439:tcp:172.18.0.2:5432: input/output error
+Encountered errors while bringing up the project.
+```
+
+If this happens, you will need to restart Docker. Open the `Settings` dialog and go to `Reset`. Select the `Restart` option (the top one). Wait till the green `Docker is running` light shows up and then go back to your terminal. Everything should work. If not, it's a Docker bug, not something you did wrong.
+
 ## Getting Started
 
 In order to run this you will want to:
