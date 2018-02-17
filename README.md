@@ -4,6 +4,17 @@ This repo represents the work of the Transportation Systems project of Hack Oreg
 
 This repo is intended to be run in a docker environment.
 
+## A note about line endings
+As you probably know, text files on Linux (where we deploy and where our containers run) have by convention lines ending with `LF`. However, Windows, where some of us test and develop, uses the convention that lines in a text file end with a `CR` and a `LF`.
+
+Git knows what we're using, and it tries to accomodate us by checking out working files with the line endings our platform uses. See this explainer from GitHub on how line endings work with Git: <https://help.github.com/articles/dealing-with-line-endings/>.
+
+Now, throw in Docker and Docker Compose. Some Dockerfiles call for copying files from your host into the image during the build. If those files came from a Git repo, the default is that their line endings are your host native convention. But inside the image, which is a Linux filesystem, some files must use the Linux line ending convention or they won't work.
+
+So far, I've found that Bash and `sh` scripts will crash if they have Windows line endings, often with mysterious error messages. Also, Python scripts like Django's `manage.py`, when executed as commands, will crash mysteriously if they have Windows line endings.
+
+One final note: `vim` has a command `:setfileformat`. Either `:setfileformat unix` if you want the Unix / Linux convention or `:setfileformat dos` if you want the DOS / Windows convention. Then save the file and edit your `.gitattributes` file to declare that the file must have that convention on checkout.
+
 ## Getting Started
 
 In order to run this you will want to:
@@ -31,7 +42,7 @@ $ cp env.sample .env
     POSTGRES_PASSWORD= <password, make it strong and unique>
     DJANGO_SECRET_KEY= <a secret key also should be long, unique random string>
     ```
-5. This release features automatic database restores to the `db` database service container. You can create database backups with `pgAdmin` or `pg_dump` and place them in `./Backups` *before doing the Docker build.* The build will copy them onto the image and the first "run" in a container will restore them. See [Automatic database restores](https://github.com/hackoregon/data-science-pet-containers/blob/master/README.md#automatic-database-restores)
+5. Download the database backup files from Google Drive and place them in `./Backups` *before doing the Docker build.* The build will copy them onto the image and the first "run" in a container will restore them. See [Automatic database restores](https://github.com/hackoregon/data-science-pet-containers/blob/master/README.md#automatic-database-restores) for the details on the restore mechanism.
 
 6. The `.env` file and the backup files have been added to the `.gitignore` file. Provided you do not rename them or change locations they will not be committed to the repo and this project will build and run.
 
