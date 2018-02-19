@@ -110,5 +110,10 @@ ENV/
 **/.DS_Store
 
 .vscode/
+
+
+# generated files from API startup
+rest_framework/
 rest_framework_swagger/
 staticfiles/
+api/migrations/0001_initial.py

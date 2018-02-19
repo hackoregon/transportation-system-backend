@@ -65,8 +65,6 @@ backlog = 2048
 #       A positive integer. Generally set in the 1-5 seconds range.
 #
 
-workers = 4
-
 try:
     # fail 'successfully' if either of these modules aren't installed
     from gevent import monkey
@@ -76,7 +74,7 @@ try:
     # setting this inside the 'try' ensures that we only
     # activate the gevent worker pool if we have gevent installed
     worker_class = 'gevent'
-
+    workers = 4
     # this ensures forked processes are patched with gevent/gevent-psycopg2
     def do_post_fork(server, worker):
         monkey.patch_all()
