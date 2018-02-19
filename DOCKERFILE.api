@@ -1,0 +1,24 @@
+FROM docker.io/bhgrant/hackoregon_geodjango
+LABEL maintainer="M. Edward (Ed) Borasky <znmeb@znmeb.net>"
+
+# add PostgreSQL client libraries
+RUN apt-get update \
+  && apt-get install -qqy --no-install-recommends \
+  gnupg \
+  && apt-get clean
+RUN mkdir -p /etc/apt/sources.list.d/
+COPY pgdg.list.jessie /etc/apt/sources.list.d/pgdg.list
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+  && apt-get update \
+  && apt-get install -qqy --no-install-recommends \
+    libpq-dev \
+    postgresql-client-10 \
+  && apt-get clean
+
+ENV PYTHONUNBUFFERED 1
+EXPOSE 8000
+COPY /bin/requirements.txt /code/
+RUN pip install -r requirements.txt
+RUN python
+COPY . /code/
+ENTRYPOINT [ "/code/bin/local-docker-entrypoint.sh" ]

@@ -1,0 +1,4 @@
+Backups/*.sh text eol=lf
+bin/*.sh text eol=lf
+bin/requirements.txt text eol=lf
+manage.py text eol=lf
