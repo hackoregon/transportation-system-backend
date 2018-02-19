@@ -58,6 +58,7 @@ In order to run this you will want to:
 
 12. To Run Tests: run the `./bin/build-test.sh -l` command.
 
+13. Note that the `api` container will write some files into your Git repository. They're in `.gitignore`, so they won't be checked into version control.
 ## Contributing
 
 To develop on the repo,
