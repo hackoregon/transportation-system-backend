@@ -110,3 +110,7 @@ ENV/
 
 .vscode/
 rest_framework_swagger/
+
+# generated files from API startup
+rest_framework/
+api/migrations/0001_initial.py
