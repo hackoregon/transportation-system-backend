@@ -9,7 +9,7 @@ while getopts ":lst" opt; do
            ;;
         s)
           docker-compose -f staging-docker-compose.yml build
-          docker-compose -p tests run --entrypoint /code/bin/test-entrypoint.sh  -p 8000 --rm api db
+          docker-compose -p tests run --entrypoint /code/bin/test-entrypoint.sh  -p 8000 --all -f
           ;;
         t)
           docker-compose -f travis-docker-compose.yml build
