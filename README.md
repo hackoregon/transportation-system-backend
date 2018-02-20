@@ -90,10 +90,18 @@ To develop on the repo,
 13. Process for staging to master will be defined.
 
 ## API
-The primary function of this API is to act as a read-only wrapper around the ODOT Crash data and expose the underlying data to the web via HTTP Requests. The secondary function is eventually expose helper functions that could simplify data pre-processing via in-built helper functions. This API aims to be RESTful. 
+
+The primary function of this API is to act as a read-only wrapper around ODOT's Crash data and expose the underlying data to the web via HTTP Requests. The secondary function is eventually expose helper functions that could simplify data pre-processing via in-built helper functions. This API aims to be RESTful. 
+
+### Endpoints
+* API endpoints can viewed in a browser. 
+* If running on local machine visit http://localhost:8000/api/ to view the API root.
+* Common endpoints (assuming local machine as host) - 
+..* http://localhost:8000/api/crashes/
+..* http://localhost:8000/api/participants/
+..* http://localhost:8000/api/vehicles/
 
 ### Versions
-
 The API supports Accept Header Versioning. If no version is specified the request header _latest_ version is returned by default. Specify versions as numbers, as shown in header example below - 
 
 ```
@@ -102,6 +110,8 @@ Host: example.com:8000
 Accept: application/json; version=1.0
 ```
 
+### Pagination
+The API c
 
 ## License
 
