@@ -89,7 +89,7 @@ DATABASES = {
     }
 }
 
-if os.environ.get('DEBUG') != "True":
+if DEBUG == False:
 
     DATABASES = {
         'default': {

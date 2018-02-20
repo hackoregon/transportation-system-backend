@@ -93,25 +93,82 @@ $ cp ./bin/env.staging.sample ./bin/.env.staging
 
 So what is changed from the default Django setup for the staging environment. **This already has been done, being included for informational purposes**
 
-* Add gunicorn, gevent, and whitenoise to `requirements.txt`
-* Set the debug variable to false in the `.env.staging`
+* Add gunicorn, gevent, and whitenoise, django-db-geventpool,  to `requirements.txt`
+* Set the debug variable to false in the `.env` (*In future maybe setup a separate env variable for environment?*)
 * make any other changes necessary to config vars, ie: database settings
-* create a staging entrypoint/prod entrypoint file that runs the gunicorn start command instead of the ./manage.py runserver
-* create the `gunicorn_config.py` file to hold gunicorn config, including using gevent worker_class
-* create a staging/production docker_compose file, to use the correct .env, entrypoint, and any other changes needed
-* Make changes to settings.py:
+* create a staging entrypoint/prod entrypoint file that runs the gunicorn start command instead of the ./manage.py runserver.
+Here is an example:
 
 ```
-# Change DEBUG line:
+gunicorn crash_data_api.wsgi -c gunicorn_config.py
+```
 
+* create the `gunicorn_config.py` file to hold gunicorn config, including using gevent worker_class. Currently we are patching psycopg2 and django with gevent/psycogreen in the post_fork worker. Also using 4 workers:
+
+```
+try:
+    # fail 'successfully' if either of these modules aren't installed
+    from gevent import monkey
+    from psycogreen.gevent import patch_psycopg
+
+
+    # setting this inside the 'try' ensures that we only
+    # activate the gevent worker pool if we have gevent installed
+    worker_class = 'gevent'
+    workers = 4
+    # this ensures forked processes are patched with gevent/gevent-psycopg2
+    def do_post_fork(server, worker):
+        monkey.patch_all()
+        patch_psycopg()
+
+        # you should see this text in your gunicorn logs if it was successful
+        worker.log.info("Made Psycopg2 Green")
+
+    post_fork = do_post_fork
+except ImportError:
+    pass
+```
+
+* Change the settings.py file to use django_db_geventpool when in production mode. You will add this after the current database settings.:
+
+```
+if os.environ.get('DEBUG') == "False":
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django_db_geventpool.backends.postgis',
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'NAME': os.environ.get('POSTGRES_NAME'),
+            'USER': os.environ.get('POSTGRES_USER'),
+            'HOST': os.environ.get('POSTGRES_HOST'),
+            'PORT': os.environ.get('POSTGRES_PORT'),
+            'CONN_MAX_AGE': 0,
+            'OPTIONS': {
+                'MAX_CONNS': 20
+            }
+        }
+    }
+```
+
+* create a staging/production docker_compose file, to use the correct variables from the .env file, entrypoint, and any other changes needed
+* Make changes to settings.py to check the debug variable and use :
+
+
+*Change DEBUG line:*
+
+```
 DEBUG = os.environ.get('DEBUG') == "True" - handles os variables being treated as strings
+```
 
-# ADD to MIDDLEWARE right after SECURITY:
+*ADD to MIDDLEWARE right after SECURITY:*
 
-
+```
 'whitenoise.middleware.WhiteNoiseMiddleware',
+```
 
-# ADD these just before the STATIC_URL so staticfiles are handled correctly and are compressed:
+*ADD these just before the STATIC_URL so staticfiles are handled correctly and are compressed:*
+
+```
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
