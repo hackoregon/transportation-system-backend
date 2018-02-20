@@ -91,7 +91,7 @@ To develop on the repo,
 
 ## API
 
-The primary function of this API is to act as a read-only wrapper around ODOT's Crash data and expose the underlying data to the web via HTTP Requests. The secondary function is eventually expose helper functions that could simplify data pre-processing via in-built helper functions. This API aims to be RESTful. 
+The primary function of this API is to act as a read-only wrapper around ODOT's Crash data and expose the underlying data to the web via HTTP Requests. The secondary function is eventually expose helper functions that could simplify data pre-processing via in-built helper functions. This API aims to be RESTful.
 
 ### Endpoints
 * API endpoints can viewed in a browser. 
@@ -111,6 +111,35 @@ TBD
 ### Vehicles Table
 TBD
 
+### Filtering
+Two types of filters are currently supported - 
+#### 1. Search Filters
+Simple text search can be performed on the following fields: 
+
+##### Crash Table
+```python
+'crash_id','crash_hr_short_desc','urb_area_short_nm','fc_short_desc','hwy_compnt_short_desc','mlge_typ_short_desc', 'specl_jrsdct_short_desc','jrsdct_grp_long_desc','st_full_nm','isect_st_full_nm','rd_char_short_desc', 'isect_typ_short_desc','crash_typ_short_desc','collis_typ_short_desc','rd_cntl_med_desc','wthr_cond_short_desc','rd_surf_short_desc','lgt_cond_short_desc','traf_cntl_device_short_desc','invstg_agy_short_desc','crash_cause_1_short_desc','crash_cause_2_short_desc','crash_cause_3_short_desc','pop_rng_med_desc','rd_cntl_med_desc'
+```
+
+##### Participants Table
+TBD
+
+##### Vehicles Table
+TBD
+
+#### Usage:
+To look for all fields listed above that match (not exact) the string "DIS-RAG" - 
+```
+http://localhost:8000/api/crashes/?search=DIS--RAG
+```
+
+#### 2. Field Filters
+The API also supports xplicit filter fields as part of URL query strings. The following fields are currently supported - 
+
+##### Usage:
+```
+http://localhost:8000/api/crashes/?ser_no=00173
+```
 
 ### Versions
 The API supports Accept Header Versioning. If no version is specified the request header _latest_ version is returned by default. Specify versions as numbers, as shown in header example below - 
@@ -120,9 +149,8 @@ GET /api/crashes HTTP/1.1
 Host: example.com:8000
 Accept: application/json; version=1.0
 ```
-
-### Pagination
-The API c
+### Note on Permissions
+All users can browse the API. Read-only access is the default permission for unauthenticated users. 
 
 ## License
 
