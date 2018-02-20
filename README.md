@@ -137,18 +137,23 @@ http://localhost:8000/api/crashes/?search=DIS--RAG
 The API also supports xplicit filter fields as part of URL query strings. The following fields are currently supported - 
 
 ##### Usage:
+If filtering just "00173" for the field 'ser_no' -
 ```
 http://localhost:8000/api/crashes/?ser_no=00173
 ```
 
 ### Versions
-The API supports Accept Header Versioning. If no version is specified the request header _latest_ version is returned by default. Specify versions as numbers, as shown in header example below - 
+The API supports Accept Header Versioning. Version numbers in API requests are optional and if no version is specified the request header _latest_ version is returned by default. Specify versions as numbers, as shown in header example below - 
 
 ```
 GET /api/crashes HTTP/1.1
 Host: example.com:8000
 Accept: application/json; version=1.0
 ```
+
+__Latest__ version: 1.0 (as of 02/19/2018)
+
+
 ### Note on Permissions
 All users can browse the API. Read-only access is the default permission for unauthenticated users. 
 
