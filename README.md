@@ -89,6 +89,20 @@ To develop on the repo,
 
 13. Process for staging to master will be defined.
 
+## API
+The primary function of this API is to act as a read-only wrapper around the ODOT Crash data and expose the underlying data to the web via HTTP Requests. The secondary function is eventually expose helper functions that could simplify data pre-processing via in-built helper functions. This API aims to be RESTful. 
+
+### Versions
+
+The API supports Accept Header Versioning. If no version is specified the request header _latest_ version is returned by default. Specify versions as numbers, as shown in header example below - 
+
+```
+GET /api/crashes HTTP/1.1
+Host: example.com:8000
+Accept: application/json; version=1.0
+```
+
+
 ## License
 
 We follow the MIT License: https://github.com/hackoregon/transportation-system-backend/blob/staging/LICENSE
