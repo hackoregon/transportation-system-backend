@@ -95,11 +95,22 @@ The primary function of this API is to act as a read-only wrapper around ODOT's 
 
 ### Endpoints
 * API endpoints can viewed in a browser. 
-* If running on local machine visit http://localhost:8000/api/ to view the API root.
-* Common endpoints (assuming local machine as host) - 
-..* http://localhost:8000/api/crashes/
-..* http://localhost:8000/api/participants/
-..* http://localhost:8000/api/vehicles/
+* List of endpoints (assuming local machine as hostm with port 8000 exposed):
+  * *API Root* - http://localhost:8000/api/
+  * *Schema* - http://localhost:8000/schema/
+  * *Crashes Table* - http://localhost:8000/api/crashes/ 
+  * *Participants Table* - http://localhost:8000/api/participants/
+  * *Vehicles Table* - http://localhost:8000/api/vehicles/
+
+### Crashes Table 
+TBD
+
+### Participants Table
+TBD
+
+### Vehicles Table
+TBD
+
 
 ### Versions
 The API supports Accept Header Versioning. If no version is specified the request header _latest_ version is returned by default. Specify versions as numbers, as shown in header example below - 
