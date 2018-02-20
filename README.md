@@ -89,6 +89,90 @@ To develop on the repo,
 
 13. Process for staging to master will be defined.
 
+## API
+
+The primary function of this API is to act as a read-only wrapper around ODOT's Crash data and expose the underlying data to the web via HTTP Requests. The secondary function is eventually expose helper functions that could simplify data pre-processing via in-built helper functions. This API aims to be RESTful.
+
+### Endpoints
+* API endpoints can viewed in a browser. 
+* List of endpoints (assuming local machine as hostm with port 8000 exposed):
+  * *API Root* - http://localhost:8000/api/
+  * *Schema* - http://localhost:8000/schema/
+  * *Crashes Table* - http://localhost:8000/api/crashes/ 
+  * *Participants Table* - http://localhost:8000/api/participants/
+  * *Vehicles Table* - http://localhost:8000/api/vehicles/
+
+### Crashes Table 
+TBD
+
+### Participants Table
+TBD
+
+### Vehicles Table
+TBD
+
+### Filtering
+Three types of filters are currently supported - 
+
+#### 1. Search Filters
+Simple text search can be performed on the following fields: 
+##### Crash Table
+```python
+'crash_id','crash_hr_short_desc','urb_area_short_nm','fc_short_desc','hwy_compnt_short_desc','mlge_typ_short_desc', 'specl_jrsdct_short_desc','jrsdct_grp_long_desc','st_full_nm','isect_st_full_nm','rd_char_short_desc', 'isect_typ_short_desc','crash_typ_short_desc','collis_typ_short_desc','rd_cntl_med_desc','wthr_cond_short_desc','rd_surf_short_desc','lgt_cond_short_desc','traf_cntl_device_short_desc','invstg_agy_short_desc','crash_cause_1_short_desc','crash_cause_2_short_desc','crash_cause_3_short_desc','pop_rng_med_desc','rd_cntl_med_desc'
+```
+##### Participants Table
+TBD
+##### Vehicles Table
+TBD
+#### Usage:
+To look for all fields listed above that match (not exact) the string "DIS-RAG" - 
+```
+http://localhost:8000/api/crashes/?search=DIS--RAG
+```
+
+#### 2. Field Filters
+The API also supports explicit filter fields as part of URL query strings. The following fields are currently supported - 
+```python
+'ser_no','cnty_id','alchl_invlv_flg','crash_day_no','crash_mo_no','crash_yr_no','crash_hr_no','schl_zone_ind','wrk_zone_ind','alchl_invlv_flg','drug_invlv_flg','crash_speed_invlv_flg','crash_hit_run_flg'
+```
+##### Usage:
+If filtering just "00173" and "00174" for the field 'ser_no' -
+```
+http://localhost:8000/api/crashes/?ser_no=00173&ser_no=00174
+```
+
+#### 3. Ordering Filters
+Results can be sorted against any field or combinations of fields.
+##### Usage:
+To show results in ascending order of the field 'ser_no':
+```
+http://localhost:8000/api/crashes/?ordering=ser_no
+```
+In descending order:
+```
+http://localhost:8000/api/crashes/?ordering=-ser_no
+```
+multiple fields:
+```
+http://localhost:8000/api/crashes/?ordering=-ser_no,rd_cntl_med_desc
+```
+
+
+### Versions
+The API supports Accept Header Versioning. Version numbers in API requests are optional and if no version is specified the request header _latest_ version is returned by default. Specify versions as numbers, as shown in header example below - 
+
+```
+GET /api/crashes HTTP/1.1
+Host: example.com:8000
+Accept: application/json; version=1.0
+```
+
+__Latest__ version: 1.0 (as of 02/19/2018)
+
+
+### Note on Permissions
+All users can browse the API. Read-only access is the default permission for unauthenticated users. 
+
 ## License
 
 We follow the MIT License: https://github.com/hackoregon/transportation-system-backend/blob/staging/LICENSE
