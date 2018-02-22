@@ -5,9 +5,17 @@ while getopts ":lst" opt; do
     case "$opt" in
         l)
           docker-compose -p tests run --entrypoint /code/bin/test-entrypoint.sh  -p 8000 --rm api
+          echo "Stopping test db container"
+          docker stop tests_db_1
+          echo "Removing test db container"
+          docker rm tests_db_1
            ;;
         s)
           docker-compose -p tests run --entrypoint /code/bin/test-entrypoint.sh  -p 8000 --all -f
+          echo "Stopping test db container"
+          docker stop tests_db_1
+          echo "Removing test db container"
+          docker rm tests_db_1
           ;;
         t)
           docker-compose -f travis-docker-compose.yml run \
