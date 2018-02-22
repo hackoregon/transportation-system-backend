@@ -56,7 +56,7 @@ In order to run this you will want to:
 
 11. Open your browser and you will be able to access the Django Rest Framework browserable front end at `http://localhost:8000/api`, the Swagger API schema at `http://localhost:8000/schema`, and the Django `admin` login at `http://localhost:8000/admin`.
 
-12. To Run Tests: run the `./bin/build-test.sh -l` command.
+12. To Run Tests: run the `./bin/build.sh -l` followed by the `./bin/test.sh -l`  command.
 
 13. Note that the `api` container will write some files into your Git repository. They're in `.gitignore`, so they won't be checked into version control.
 
@@ -153,6 +153,17 @@ To develop on the repo,
 
 The primary function of this API is to act as a read-only wrapper around ODOT's Crash data and expose the underlying data to the web via HTTP Requests. The secondary function is eventually expose helper functions that could simplify data pre-processing via in-built helper functions. This API aims to be RESTful.
 
+#### Note on Unmanaged models
+The models in this project are unmanaged. Given that a) the API sits upon a legacy database and b) the API is intended to be read-only, the decision was made to decouple Django from database management and isolate that solely to the underlying PostGres shell environment. This is to prevent creation and deletions of the underlying data tables primarily during development. Malicious editing (outside of the dev environment) is less of a concern since that can be handled by a secure permissions for users making API calls.
+
+### Note on Permissions
+All users can browse the API. Read-only access is the default permission for unauthenticated users.
+
+### Note on Testing
+Testing an unmanaged model requires a few modifications to the test runner. Since migrations don't create any tables, they create a blank test database which results in no test data being found. The fix is outlined in the following post - https://dev.to/patrnk/testing-against-unmanaged-models-in-django
+
+Runnning a test requires you have 'django-test-without-migrations' as part of your requirements. The only other point to remember is that tests need to be run with `./manage.py test --no-migrations` flag to prevent Django from trying to run migrations on your test db. 
+
 ### Endpoints
 * API endpoints can viewed in a browser.
 * List of endpoints (assuming local machine as hostm with port 8000 exposed):
@@ -229,9 +240,6 @@ Accept: application/json; version=1.0
 
 __Latest__ version: 1.0 (as of 02/19/2018)
 
-
-### Note on Permissions
-All users can browse the API. Read-only access is the default permission for unauthenticated users.
 
 ## License
 
