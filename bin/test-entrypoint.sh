@@ -12,13 +12,12 @@ do
 done
 
 >&2 echo "Postgres is up"
-echo Debug: $DEBUG
+# echo Debug: $DEBUG
 
-echo "Make migrations"
-./manage.py makemigrations
+# Collect static files
 
-echo "Migrate"
-./manage.py migrate
+# echo "Migrate"
+# ./manage.py migrate
 
 
-./manage.py test --noinput
+./manage.py test --nomigrations

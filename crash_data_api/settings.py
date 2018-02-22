@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework',
     'rest_framework_swagger',
+    'test_without_migrations',
     ]
 
 MIDDLEWARE = [
@@ -148,6 +149,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
 
+#custom test runner to toggle between Managed=True and Managed=False for models handling test db
+TEST_RUNNER = 'api.utils.UnManagedModelTestRunner'
+
 #rest framework settings for API
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
@@ -157,6 +161,9 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'TEST_REQUEST_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
 }
 
 LOGGING = {
@@ -175,3 +182,4 @@ LOGGING = {
         },
     }
 }
+
