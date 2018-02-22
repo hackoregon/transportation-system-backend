@@ -59,6 +59,123 @@ In order to run this you will want to:
 12. To Run Tests: run the `./bin/build-test.sh -l` command.
 
 13. Note that the `api` container will write some files into your Git repository. They're in `.gitignore`, so they won't be checked into version control.
+
+## Run in Staging Environment
+
+While developing the API, using the built in dev server is useful as it allows for live reloading, and debug messages. When running in a production environment, this is a security risk, and not efficient. As such a staging/production environment has been created using the following technologies:
+
+* [Gunicorn](http://gunicorn.org/) - A "green" HTTP server
+* [Gevent](http://www.gevent.org/) - Asynchronous workers
+* [Pyscopgreen](https://pypi.python.org/pypi/psycogreen) - A "green" version of the psycop database connector
+* [django_db_geventpool](https://pypi.python.org/pypi/django-db-geventpool) -  DB pool using gevent for PostgreSQL DB.
+* [WhiteNoise](https://pypi.python.org/pypi/whitenoise) - allows for hosting of static files by gunicorn in a prod environment vs. integrating a webserver
+
+### Instructions:
+
+1. copy the `/bin/env.staging.sample` file to create a `.env.staging` file in same directory:
+```
+$ cp ./bin/env.staging.sample ./bin/.env.staging
+```
+
+2. open the `./bin/.env` in your text editor and complete the environmental variables.
+
+3. Download and save the sql file if you have not already.
+
+4. Run the `build.sh` script to build the project for the staging environment: `$ ./bin/build.sh -s`
+
+5. Start the project using the staging flag: `$ ./bin/start.sh -s`
+
+6.  Open your browser and you should be able to access the Django Restframework browserable front end at: http://localhost:8000/api and Swagger at http://localhost:8000/schema
+
+7. Try going to an nonexistent page and you should see a generic 404 Not found page instead of the Django debug screen.
+
+### What was configured:
+
+So what is changed from the default Django setup for the staging environment. **This already has been done, being included for informational purposes**
+
+* Add gunicorn, gevent, and whitenoise, django-db-geventpool,  to `requirements.txt`
+* Set the debug variable to false in the `.env` (*In future maybe setup a separate env variable for environment?*)
+* make any other changes necessary to config vars, ie: database settings
+* create a staging entrypoint/prod entrypoint file that runs the gunicorn start command instead of the ./manage.py runserver.
+Here is an example:
+
+```
+gunicorn crash_data_api.wsgi -c gunicorn_config.py
+```
+
+* create the `gunicorn_config.py` file to hold gunicorn config, including using gevent worker_class. Currently we are patching psycopg2 and django with gevent/psycogreen in the post_fork worker. Also using 4 workers:
+
+```
+try:
+    # fail 'successfully' if either of these modules aren't installed
+    from gevent import monkey
+    from psycogreen.gevent import patch_psycopg
+
+
+    # setting this inside the 'try' ensures that we only
+    # activate the gevent worker pool if we have gevent installed
+    worker_class = 'gevent'
+    workers = 4
+    # this ensures forked processes are patched with gevent/gevent-psycopg2
+    def do_post_fork(server, worker):
+        monkey.patch_all()
+        patch_psycopg()
+
+        # you should see this text in your gunicorn logs if it was successful
+        worker.log.info("Made Psycopg2 Green")
+
+    post_fork = do_post_fork
+except ImportError:
+    pass
+```
+
+* Change the settings.py file to use django_db_geventpool when in production mode. You will add this after the current database settings.:
+
+```
+if os.environ.get('DEBUG') == "False":
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django_db_geventpool.backends.postgis',
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'NAME': os.environ.get('POSTGRES_NAME'),
+            'USER': os.environ.get('POSTGRES_USER'),
+            'HOST': os.environ.get('POSTGRES_HOST'),
+            'PORT': os.environ.get('POSTGRES_PORT'),
+            'CONN_MAX_AGE': 0,
+            'OPTIONS': {
+                'MAX_CONNS': 20
+            }
+        }
+    }
+```
+
+* create a staging/production docker_compose file, to use the correct variables from the .env file, entrypoint, and any other changes needed
+* Make changes to settings.py to check the debug variable and use :
+
+
+*Change DEBUG line:*
+
+```
+DEBUG = os.environ.get('DEBUG') == "True" - handles os variables being treated as strings
+```
+
+*ADD to MIDDLEWARE right after SECURITY:*
+
+```
+'whitenoise.middleware.WhiteNoiseMiddleware',
+```
+
+*ADD these just before the STATIC_URL so staticfiles are handled correctly and are compressed:*
+
+```
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+```
+
+
 ## Contributing
 
 To develop on the repo,
@@ -94,15 +211,15 @@ To develop on the repo,
 The primary function of this API is to act as a read-only wrapper around ODOT's Crash data and expose the underlying data to the web via HTTP Requests. The secondary function is eventually expose helper functions that could simplify data pre-processing via in-built helper functions. This API aims to be RESTful.
 
 ### Endpoints
-* API endpoints can viewed in a browser. 
+* API endpoints can viewed in a browser.
 * List of endpoints (assuming local machine as hostm with port 8000 exposed):
   * *API Root* - http://localhost:8000/api/
   * *Schema* - http://localhost:8000/schema/
-  * *Crashes Table* - http://localhost:8000/api/crashes/ 
+  * *Crashes Table* - http://localhost:8000/api/crashes/
   * *Participants Table* - http://localhost:8000/api/participants/
   * *Vehicles Table* - http://localhost:8000/api/vehicles/
 
-### Crashes Table 
+### Crashes Table
 TBD
 
 ### Participants Table
@@ -112,10 +229,10 @@ TBD
 TBD
 
 ### Filtering
-Three types of filters are currently supported - 
+Three types of filters are currently supported -
 
 #### 1. Search Filters
-Simple text search can be performed on the following fields: 
+Simple text search can be performed on the following fields:
 ##### Crash Table
 ```python
 'crash_id','crash_hr_short_desc','urb_area_short_nm','fc_short_desc','hwy_compnt_short_desc','mlge_typ_short_desc', 'specl_jrsdct_short_desc','jrsdct_grp_long_desc','st_full_nm','isect_st_full_nm','rd_char_short_desc', 'isect_typ_short_desc','crash_typ_short_desc','collis_typ_short_desc','rd_cntl_med_desc','wthr_cond_short_desc','rd_surf_short_desc','lgt_cond_short_desc','traf_cntl_device_short_desc','invstg_agy_short_desc','crash_cause_1_short_desc','crash_cause_2_short_desc','crash_cause_3_short_desc','pop_rng_med_desc','rd_cntl_med_desc'
@@ -125,13 +242,13 @@ TBD
 ##### Vehicles Table
 TBD
 #### Usage:
-To look for all fields listed above that match (not exact) the string "DIS-RAG" - 
+To look for all fields listed above that match (not exact) the string "DIS-RAG" -
 ```
 http://localhost:8000/api/crashes/?search=DIS--RAG
 ```
 
 #### 2. Field Filters
-The API also supports explicit filter fields as part of URL query strings. The following fields are currently supported - 
+The API also supports explicit filter fields as part of URL query strings. The following fields are currently supported -
 ```python
 'ser_no','cnty_id','alchl_invlv_flg','crash_day_no','crash_mo_no','crash_yr_no','crash_hr_no','schl_zone_ind','wrk_zone_ind','alchl_invlv_flg','drug_invlv_flg','crash_speed_invlv_flg','crash_hit_run_flg'
 ```
@@ -159,7 +276,7 @@ http://localhost:8000/api/crashes/?ordering=-ser_no,rd_cntl_med_desc
 
 
 ### Versions
-The API supports Accept Header Versioning. Version numbers in API requests are optional and if no version is specified the request header _latest_ version is returned by default. Specify versions as numbers, as shown in header example below - 
+The API supports Accept Header Versioning. Version numbers in API requests are optional and if no version is specified the request header _latest_ version is returned by default. Specify versions as numbers, as shown in header example below -
 
 ```
 GET /api/crashes HTTP/1.1
@@ -171,7 +288,7 @@ __Latest__ version: 1.0 (as of 02/19/2018)
 
 
 ### Note on Permissions
-All users can browse the API. Read-only access is the default permission for unauthenticated users. 
+All users can browse the API. Read-only access is the default permission for unauthenticated users.
 
 ## License
 

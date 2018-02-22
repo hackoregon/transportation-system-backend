@@ -13,7 +13,7 @@ do
 done
 
 >&2 echo "Postgres is up"
-
+echo Debug: $DEBUG
 # Collect static files
 echo "Collect static files"
 ./manage.py collectstatic --noinput
