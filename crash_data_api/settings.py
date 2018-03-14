@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
+    'corsheaders',
     'django_filters',
     'rest_framework',
     'rest_framework_swagger',
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'crash_data_api.urls'
@@ -183,3 +185,5 @@ LOGGING = {
     }
 }
 
+#add CORS support for all domains
+CORS_ORIGIN_ALLOW_ALL = True
