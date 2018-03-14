@@ -263,6 +263,11 @@ The API also supports explicit filter fields as part of URL query strings. The f
 ```python
 'ser_no','cnty_id','alchl_invlv_flg','crash_day_no','crash_mo_no','crash_yr_no','crash_hr_no','schl_zone_ind','wrk_zone_ind','alchl_invlv_flg','drug_invlv_flg','crash_speed_invlv_flg','crash_hit_run_flg'
 ```
+Note:
+
+1. Filters need to be an exact match.
+2. URLs need to be encoded. All reserved characters characters should be escaped. For example, a query on the field public_location_description with the value SW 6th & Salmon, then the query should look like this - http://localhost:8000/api/passenger-census/?public_location_description=SW%206th%20%26%20Salmon. Here both spaces (%20) and ampersands (%26) have been escaped.
+
 ##### Usage:
 If filtering just "00173" and "00174" for the field 'ser_no' -
 ```
