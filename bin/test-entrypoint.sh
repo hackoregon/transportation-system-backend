@@ -18,6 +18,6 @@ done
 
 echo "Migrate"
 ./manage.py migrate
-
-./manage.py loaddata initial_data.json
 ./manage.py test --nomigrations
+
+
