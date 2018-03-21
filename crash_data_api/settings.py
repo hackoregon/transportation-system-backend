@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'test_without_migrations',
+    'autofixture',
     ]
 
 MIDDLEWARE = [

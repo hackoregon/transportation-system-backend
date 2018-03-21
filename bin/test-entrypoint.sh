@@ -16,8 +16,8 @@ done
 
 # Collect static files
 
-# echo "Migrate"
-# ./manage.py migrate
+echo "Migrate"
+./manage.py migrate
 
-
+./manage.py loaddata initial_data.json
 ./manage.py test --nomigrations
