@@ -188,3 +188,10 @@ LOGGING = {
 
 #add CORS support for all domains
 CORS_ORIGIN_ALLOW_ALL = True
+
+#swagger settings
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,
+    'DOC_EXPANSION': 'list',
+    'APIS_SORTER': 'alpha'
+}
