@@ -1,6 +1,6 @@
 version: '3.4'
 services:
-  api:
+  api_staging:
     build:
       context: .
       dockerfile: DOCKERFILE.api

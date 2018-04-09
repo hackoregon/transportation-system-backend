@@ -1,15 +1,15 @@
 version: '3.4'
 services:
-  db:
+  db_development:
     build:
       context: .
       dockerfile: Dockerfile.postgis
-    image: db
+    image: db_development
     ports:
       - 5439:5432
     environment:
       - POSTGRES_PASSWORD
-  api:
+  api_development:
     build:
       context: .
       dockerfile: DOCKERFILE.api
@@ -20,7 +20,7 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      - db_development
     environment:
       - PROJECT_NAME
       - DEBUG

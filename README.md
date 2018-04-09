@@ -72,22 +72,35 @@ While developing the API, using the built in dev server is useful as it allows f
 
 ### Instructions:
 
-1. copy the `/bin/env.staging.sample` file to create a `.env.staging` file in same directory:
+1. Update the .env file with aws variables. These will be provided to the team's data manager. Reach out if you think you need access
+
 ```
-$ cp ./bin/env.staging.sample ./bin/.env.staging
+
+# the database superuser name - this is the default
+STAGING_POSTGRES_USER=aw_postgres_username
+
+# the database name the API will connect to - "dbname" in most PostgreSQL command-line tools
+STAGING_POSTGRES_NAME=transportation-systems-odot-crash-data
+
+# *service* name (*not* image name) of the database in the Docker network
+STAGING_POSTGRES_HOST=aws_ip
+
+# port the database is listening on in the Docker network
+STAGING_POSTGRES_PORT=5432
+
+# password for the PostgreSQL database superuser in the database container
+STAGING_POSTGRES_PASSWORD=aw_postgres_password
+
+
 ```
 
-2. open the `./bin/.env` in your text editor and complete the environmental variables.
+2. Run the `build.sh` script to build the project for the staging environment: `$ ./bin/build.sh -s`
 
-3. Download and save the sql file if you have not already.
+3. Start the project using the staging flag: `$ ./bin/start.sh -s`
 
-4. Run the `build.sh` script to build the project for the staging environment: `$ ./bin/build.sh -s`
+4.  Open your browser and you should be able to access the Django Restframework browserable front end at: http://localhost:8000/api and Swagger at http://localhost:8000/schema
 
-5. Start the project using the staging flag: `$ ./bin/start.sh -s`
-
-6.  Open your browser and you should be able to access the Django Restframework browserable front end at: http://localhost:8000/api and Swagger at http://localhost:8000/schema
-
-7. Try going to an nonexistent page and you should see a generic 404 Not found page instead of the Django debug screen.
+5. Try going to an nonexistent page and you should see a generic 404 Not found page instead of the Django debug screen.
 
 ### What was configured:
 
@@ -219,7 +232,7 @@ All users can browse the API. Read-only access is the default permission for una
 ### Note on Testing
 Testing an unmanaged model requires a few modifications to the test runner. Since migrations don't create any tables, they create a blank test database which results in no test data being found. The fix is outlined in the following post - https://dev.to/patrnk/testing-against-unmanaged-models-in-django
 
-Runnning a test requires you have 'django-test-without-migrations' as part of your requirements. The only other point to remember is that tests need to be run with `./manage.py test --no-migrations` flag to prevent Django from trying to run migrations on your test db. 
+Runnning a test requires you have 'django-test-without-migrations' as part of your requirements. The only other point to remember is that tests need to be run with `./manage.py test --no-migrations` flag to prevent Django from trying to run migrations on your test db.
 
 ### Endpoints
 * API endpoints can viewed in a browser.
