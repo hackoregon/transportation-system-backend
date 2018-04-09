@@ -1,15 +1,6 @@
 version: '3.4'
 services:
-  db:
-    build:
-      context: .
-      dockerfile: Dockerfile.postgis
-    image: db
-    ports:
-      - 5439:5432
-    environment:
-      - POSTGRES_PASSWORD
-  api:
+  api_staging:
     build:
       context: .
       dockerfile: DOCKERFILE.api
@@ -19,14 +10,12 @@ services:
       - .:/code
     ports:
       - "8000:8000"
-    depends_on:
-      - db
     environment:
       - PROJECT_NAME
       - DEBUG=False
-      - POSTGRES_USER
-      - POSTGRES_NAME
-      - POSTGRES_HOST
-      - POSTGRES_PORT
-      - POSTGRES_PASSWORD
+      - POSTGRES_USER=${STAGING_POSTGRES_USER}
+      - POSTGRES_NAME=${STAGING_POSTGRES_NAME}
+      - POSTGRES_HOST=${STAGING_POSTGRES_HOST}
+      - POSTGRES_PORT=${STAGING_POSTGRES_PORT}
+      - POSTGRES_PASSWORD=${STAGING_POSTGRES_PASSWORD}
       - DJANGO_SECRET_KEY
