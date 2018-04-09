@@ -96,7 +96,7 @@ if DEBUG == False:
 
     DATABASES = {
         'default': {
-            'ENGINE': 'django_db_geventpool.backends.postgis',
+            'ENGINE': 'django_db_geventpool.backends.postgresql_psycopg2',
             'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
             'NAME': os.environ.get('POSTGRES_NAME'),
             'USER': os.environ.get('POSTGRES_USER'),

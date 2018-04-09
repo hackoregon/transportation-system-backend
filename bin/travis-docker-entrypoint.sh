@@ -21,4 +21,7 @@ echo Debug: $DEBUG
 
 python manage.py migrate
 
-gunicorn crash_data_api.wsgi -c gunicorn_config.py
+# gunicorn crash_data_api.wsgi -c gunicorn_config.py
+
+echo "Run server..."
+./manage.py runserver 0.0.0.0:8000
