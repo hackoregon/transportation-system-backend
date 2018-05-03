@@ -347,7 +347,7 @@ Travis is a Continuous Integration and Development tool which integrates with Gi
 
 Checkout our Travis build logs here:
 
-
+* https://travis-ci.org/hackoregon/transportation-system-backend
 
 ## License
 
