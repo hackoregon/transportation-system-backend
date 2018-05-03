@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,7 +32,6 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -88,15 +88,18 @@ DATABASES = {
         'NAME': os.environ.get('POSTGRES_NAME'),
         'USER': os.environ.get('POSTGRES_USER'),
         'HOST': os.environ.get('POSTGRES_HOST'),
-        'PORT': os.environ.get('POSTGRES_PORT')
+        'PORT': os.environ.get('POSTGRES_PORT'),
+        'TEST': {
+            'NAME': os.environ.get('POSTGRES_NAME'),
+        },
     }
 }
-
+#
 if DEBUG == False:
 
     DATABASES = {
         'default': {
-            'ENGINE': 'django_db_geventpool.backends.postgis',
+            'ENGINE': 'django_db_geventpool.backends.postgresql_psycopg2',
             'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
             'NAME': os.environ.get('POSTGRES_NAME'),
             'USER': os.environ.get('POSTGRES_USER'),
@@ -150,9 +153,9 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
-
-#custom test runner to toggle between Managed=True and Managed=False for models handling test db
-TEST_RUNNER = 'api.utils.UnManagedModelTestRunner'
+#
+# #custom test runner to toggle between Managed=True and Managed=False for models handling test db
+# TEST_RUNNER = 'api.utils.UnManagedModelTestRunner'
 
 #rest framework settings for API
 REST_FRAMEWORK = {

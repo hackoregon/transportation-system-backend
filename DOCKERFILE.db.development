@@ -1,0 +1,17 @@
+FROM postgres:9.6
+LABEL maintainer="M. Edward (Ed) Borasky <znmeb@znmeb.net>"
+
+# Install apt packages
+RUN apt-get update \
+  && apt-get install -qqy --no-install-recommends \
+    postgis \
+    postgresql-9.6-postgis-2.4 \
+    postgresql-9.6-postgis-2.4-scripts \
+    postgresql-9.6-postgis-scripts \
+    postgresql-9.6-pgrouting \
+  && apt-get clean
+
+# set up automatic restores
+COPY postgis-scripts/1make-dbusers.sh Backups/restore-all.sh /docker-entrypoint-initdb.d/
+RUN chmod +x /docker-entrypoint-initdb.d/*.sh
+COPY Backups /Backups
