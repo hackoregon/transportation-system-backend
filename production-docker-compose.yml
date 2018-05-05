@@ -1,7 +1,7 @@
 
 version: '3.4'
 services:
-  api_production:
+  transportation-systems-service:
     build:
       context: .
       dockerfile: DOCKERFILE.api.production
