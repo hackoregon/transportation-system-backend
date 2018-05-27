@@ -1,0 +1,22 @@
+
+version: '3.4'
+services:
+  transportation-systems-service:
+    build:
+      context: .
+      dockerfile: DOCKERFILE.api.production
+    image: "${DOCKER_REPO}/${DEPLOY_TARGET}/${DOCKER_IMAGE}:latest"
+    command: ./bin/production-docker-entrypoint.sh
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    environment:
+      - PROJECT_NAME
+      - DEBUG=False
+      - POSTGRES_USER=${PRODUCTION_POSTGRES_USER}
+      - POSTGRES_NAME=${PRODUCTION_POSTGRES_NAME}
+      - POSTGRES_HOST=${PRODUCTION_POSTGRES_HOST}
+      - POSTGRES_PORT=${PRODUCTION_POSTGRES_PORT}
+      - POSTGRES_PASSWORD=${PRODUCTION_POSTGRES_PASSWORD}
+      - DJANGO_SECRET_KEY=${PRODUCTION_DJANGO_SECRET_KEY}

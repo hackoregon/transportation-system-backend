@@ -1,0 +1,34 @@
+version: '3.4'
+services:
+  db_development:
+    build:
+      context: .
+      dockerfile: DOCKERFILE.db.development
+    image: transportationsystems_backend_db_development
+    ports:
+      - 5439:5432
+    environment:
+      - POSTGRES_PASSWORD=${DEVELOPMENT_POSTGRES_PASSWORD}
+      - DATABASE_OWNER=${DEVELOPMENT_DATABASE_OWNER}
+      - TEAM_PASSWORD=${DEVELOPMENT_TEAM_PASSWORD}
+  api_development:
+    build:
+      context: .
+      dockerfile: DOCKERFILE.api.development
+    image: transportationsystems_backend_api_development
+    command: ./bin/development-docker-entrypoint.sh
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db_development
+    environment:
+      - PROJECT_NAME
+      - DEBUG=True
+      - POSTGRES_USER=${DEVELOPMENT_POSTGRES_USER}
+      - POSTGRES_NAME=${DEVELOPMENT_POSTGRES_NAME}
+      - POSTGRES_HOST=${DEVELOPMENT_POSTGRES_HOST}
+      - POSTGRES_PORT=${DEVELOPMENT_POSTGRES_PORT}
+      - POSTGRES_PASSWORD=${DEVELOPMENT_POSTGRES_PASSWORD}
+      - DJANGO_SECRET_KEY=${DEVELOPMENT_DJANGO_SECRET_KEY}
