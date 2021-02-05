@@ -12,7 +12,11 @@ from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 
 
 class CrashViewSet(viewsets.ModelViewSet):
-    
+    """
+    retrieve: Get a single Crash instance
+
+    list: Get a list of all Crashes
+    """
     queryset = Crash.objects.all()
     serializer_class = CrashSerializer
     filter_backends = (SearchFilter,DjangoFilterBackend,OrderingFilter,)
@@ -29,11 +33,52 @@ class CrashViewSet(viewsets.ModelViewSet):
     ordering_fields = '__all__'
 
 class ParticViewSet(viewsets.ModelViewSet):
+    """
+    retrieve: Get a single Participant instance
 
+    list: Get a list of all Participants
+    """
     queryset = Partic.objects.all()
     serializer_class = ParticSerializer
+    filter_backends = (SearchFilter,DjangoFilterBackend,OrderingFilter,)
+    search_fields = ('partic_typ_short_desc','drvr_lic_stat_short_desc',
+    'drvr_res_short_desc','inj_svrty_short_desc','sfty_equip_use_short_desc',
+    'mvmnt_short_desc','partic_cmpss_dir_from_short_desc',
+    'partic_cmpss_dir_to_short_desc','non_motrst_loc_short_desc','actn_short_desc',
+    'partic_err_1_short_desc','partic_err_2_short_desc','partic_err_3_short_desc',
+    'partic_cause_1_short_desc','partic_cause_2_short_desc','partic_cause_3_short_desc',
+    'partic_evnt_1_short_desc','partic_evnt_2_short_desc','partic_evnt_3_short_desc')
+    filter_fields = ('crash_id','vhcl_id','partic_dsply_seq_no','vhcl_coded_seq_no','partic_vhcl_seq_no',
+    'partic_typ_cd','partic_hit_run_flg','pub_empl_flg','sex_cd','age_val','drvr_lic_stat_cd',
+    'drvr_res_stat_cd','inj_svrty_cd','sfty_equip_use_cd','airbag_deploy_ind','mvmnt_cd',
+    'cmpss_dir_from_cd','cmpss_dir_to_cd','non_motrst_loc_cd','actn_cd','partic_err_1_cd',
+    'partic_err_2_cd','partic_err_3_cd','partic_cause_1_cd','partic_cause_2_cd','partic_cause_3_cd',
+    'partic_evnt_1_cd','partic_evnt_2_cd','partic_evnt_3_cd','bac_val','alchl_use_rpt_ind',
+    'drug_use_rpt_ind','strikg_partic_flg')
+    ordering_fields = '__all__'
 
 class VhclViewSet(viewsets.ModelViewSet):
+    """
+    This endpoint shows all vehicles.
+
+    retrieve: Get a single Vehicle instance
+
+    list: Get a list of all Vehicles
+    """
 
     queryset = Vhcl.objects.all()
     serializer_class = VhclSerializer
+    filter_backends = (SearchFilter,DjangoFilterBackend,OrderingFilter,)
+    search_fields = ('vhcl_ownshp_short_desc','vhcl_use_short_desc',
+    'vhcl_typ_short_desc','mvmnt_short_desc','vhcl_cmpss_dir_from_short_desc',
+    'vhcl_cmpss_dir_to_short_desc','actn_short_desc','vhcl_cause_1_short_desc',
+    'vhcl_cause_2_short_desc','vhcl_cause_3_short_desc','vhcl_evnt_1_short_desc',
+    'vhcl_evnt_2_short_desc','vhcl_evnt_3_short_desc')
+    filter_fields = ('vhcl_id','crash_id','vhcl_coded_seq_no','vhcl_ownshp_cd',
+    'vhcl_use_cd','vhcl_typ_cd','emrgcy_vhcl_use_flg','trlr_qty','mvmnt_cd',
+    'cmpss_dir_from_cd','cmpss_dir_to_cd','actn_cd','vhcl_cause_1_cd','vhcl_cause_2_cd',
+    'vhcl_cause_3_cd','vhcl_evnt_1_cd','vhcl_evnt_2_cd','vhcl_evnt_3_cd',
+    'vhcl_speed_flg','vhcl_hit_run_flg','vhcl_sfty_equip_used_qty',
+    'vhcl_sfty_equip_unused_qty','vhcl_sfty_equip_use_unknwn_qty','vhcl_occup_cnt',
+    'strikg_vhcl_flg')
+    ordering_fields = '__all__'

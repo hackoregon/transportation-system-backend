@@ -16,8 +16,8 @@ done
 
 # Collect static files
 
-# echo "Migrate"
-# ./manage.py migrate
-
-
+echo "Migrate"
+./manage.py migrate
 ./manage.py test --nomigrations
+
+

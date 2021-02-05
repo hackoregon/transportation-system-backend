@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'test_without_migrations',
+    'autofixture',
     ]
 
 MIDDLEWARE = [
@@ -187,3 +188,10 @@ LOGGING = {
 
 #add CORS support for all domains
 CORS_ORIGIN_ALLOW_ALL = True
+
+#swagger settings
+SWAGGER_SETTINGS = {
+    'USE_SESSION_AUTH': True,
+    'DOC_EXPANSION': 'list',
+    'APIS_SORTER': 'alpha'
+}
